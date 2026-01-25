@@ -1,0 +1,10 @@
+Project: Kuallpapers (KDE Plasma 6 wallpaper plugin, QML + JavaScript).
+
+Guidelines:
+- Prefer editing QML in contents/ui and JS in contents/code.
+- Keep configuration keys aligned with contents/config/main.xml (kcfg). If you add/change a setting, update both QML and kcfg.
+- Image paths should be portable: use package-relative paths like "images/1.jpg" or absolute paths/URLs. Never hardcode user-specific absolute paths.
+- When resolving image paths, accept both raw filesystem paths and file:// URLs.
+- Network access must use HTTPS and fail gracefully without blocking UI.
+- Preserve existing style/formatting and avoid unrelated refactors.
+- Use console logs sparingly and prefix with "Kuallpapers:" for consistency.

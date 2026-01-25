@@ -1,0 +1,21 @@
+{
+  "KPackageStructure": "Plasma/Wallpaper",
+  "KPlugin": {
+    "Authors": [
+      {
+        "Email": "matt@sp1ke.dev",
+        "Name": "Zp1k_e"
+      }
+    ],
+    "Category": "Wallpaper",
+    "Description": "Automatically changes wallpaper based on a user-defined time schedule",
+    "Icon": "preferences-desktop-wallpaper",
+    "Id": "org.kde.plasma.kuallpapers",
+    "License": "Apache-2.0",
+    "Name": "Kuallpapers",
+    "Version": "1.0.0",
+    "Website": "https://github.com/zp1ke/kuallpapers"
+  },
+  "Keywords": "",
+  "X-KDE-ParentApp": "org.kde.plasmashell"
+}

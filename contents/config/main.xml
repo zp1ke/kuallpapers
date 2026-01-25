@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0 http://www.kde.org/standards/kcfg/1.0/kcfg.xsd">
+  <kcfgfile name="" />
+
+  <group name="General">
+    <entry name="ScheduleJson" type="String">
+      <default>{"00:00":"images/11-Mid-Night.png","04:00":"images/12-Late-Night.png","06:00":"images/01-Early-Morning.png","08:00":"images/02-Mid-Morning.png","10:00":"images/03-Late-Morning.png","12:00":"images/04-Early-Afternoon.png","14:00":"images/05-Mid-Afternoon.png","16:00":"images/06-Late-Afternoon.png","18:00":"images/07-Early-Evening.png","19:30":"images/08-Mid-Evening.png","21:00":"images/09-Late-Evening.png","22:30":"images/10-Early-Night.png"}</default>
+    </entry>
+    <entry name="UpdateInterval" type="Int">
+      <default>5</default>
+    </entry>
+    <entry name="ShowDebug" type="Bool">
+      <default>false</default>
+    </entry>
+    <entry name="FillMode" type="Int">
+      <default>2</default>
+    </entry>
+  </group>
+</kcfg>
