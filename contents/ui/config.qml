@@ -79,8 +79,63 @@ ColumnLayout {
         onTextChanged: if (!root.__initializing) loadScheduleFromConfig()
     }
 
+    function exportSettings() {
+        const settings = {
+            "ScheduleJson": scheduleJsonField.text,
+            "UpdateInterval": updateIntervalSpinBox.value,
+            "ShowDebug": debugCheckBox.checked,
+            "FillMode": fillModeConfig.value
+        }
+        return JSON.stringify(settings, null, 2)
+    }
+
+    function importSettings(jsonString) {
+        try {
+            const settings = JSON.parse(jsonString)
+            if (settings.ScheduleJson !== undefined) {
+                scheduleJsonField.text = settings.ScheduleJson
+            }
+            if (settings.UpdateInterval !== undefined) {
+                updateIntervalSpinBox.value = settings.UpdateInterval
+            }
+            if (settings.ShowDebug !== undefined) {
+                debugCheckBox.checked = settings.ShowDebug
+            }
+            if (settings.FillMode !== undefined) {
+                fillModeConfig.value = settings.FillMode
+            }
+            return true
+        } catch (e) {
+            console.error("Failed to import settings:", e)
+            return false
+        }
+    }
+
     Kirigami.FormLayout {
         Layout.fillWidth: true
+
+        Kirigami.Separator {
+            Kirigami.FormData.label: "Import / Export"
+            Kirigami.FormData.isSection: true
+        }
+
+        RowLayout {
+            Kirigami.FormData.label: "Settings:"
+            spacing: 8
+
+            QtControls2.Button {
+                text: "Export Settings"
+                icon.name: "document-export"
+                onClicked: exportDialog.open()
+            }
+
+            QtControls2.Button {
+                text: "Import Settings"
+                icon.name: "document-import"
+                onClicked: importDialog.open()
+            }
+        }
+
         Kirigami.Separator {
             Kirigami.FormData.label: "Schedule"
             Kirigami.FormData.isSection: true
@@ -240,6 +295,51 @@ ColumnLayout {
             if (targetIndex >= 0 && targetIndex < scheduleModel.count) {
                 scheduleModel.setProperty(targetIndex, "image", selectedPath)
                 saveScheduleToConfig()
+            }
+        }
+    }
+
+    // File dialog for exporting settings
+    FileDialog {
+        id: exportDialog
+        title: "Export Settings"
+        fileMode: FileDialog.SaveFile
+        nameFilters: ["JSON files (*.json)", "All files (*)"]
+        defaultSuffix: "json"
+        onAccepted: {
+            const filePath = selectedFile.toString().replace("file://", "")
+            const jsonContent = exportSettings()
+
+            // Use Qt.StandardPaths to write file
+            const success = TimeCalc.writeFile(filePath, jsonContent)
+            if (success) {
+                console.log("Settings exported to:", filePath)
+            } else {
+                console.error("Failed to export settings to:", filePath)
+            }
+        }
+    }
+
+    // File dialog for importing settings
+    FileDialog {
+        id: importDialog
+        title: "Import Settings"
+        fileMode: FileDialog.OpenFile
+        nameFilters: ["JSON files (*.json)", "All files (*)"]
+        onAccepted: {
+            const filePath = selectedFile.toString().replace("file://", "")
+
+            // Use Qt.StandardPaths to read file
+            const jsonContent = TimeCalc.readFile(filePath)
+            if (jsonContent !== null) {
+                const success = importSettings(jsonContent)
+                if (success) {
+                    console.log("Settings imported from:", filePath)
+                } else {
+                    console.error("Failed to parse settings from:", filePath)
+                }
+            } else {
+                console.error("Failed to read file:", filePath)
             }
         }
     }

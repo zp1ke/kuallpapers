@@ -100,3 +100,30 @@ function getNextUpdateTimeSchedule(scheduleInput) {
   const firstMinutes = timeToMinutes(parseTimeString(entries[0].time));
   return (24 * 60 - currentMinutes + firstMinutes) * 60 * 1000;
 }
+
+function writeFile(filePath, content) {
+  try {
+    const request = new XMLHttpRequest();
+    request.open("PUT", "file://" + filePath, false);
+    request.send(content);
+    return true;
+  } catch (e) {
+    console.error("Error writing file:", e);
+    return false;
+  }
+}
+
+function readFile(filePath) {
+  try {
+    const request = new XMLHttpRequest();
+    request.open("GET", "file://" + filePath, false);
+    request.send(null);
+    if (request.status === 200 || request.status === 0) {
+      return request.responseText;
+    }
+    return null;
+  } catch (e) {
+    console.error("Error reading file:", e);
+    return null;
+  }
+}
