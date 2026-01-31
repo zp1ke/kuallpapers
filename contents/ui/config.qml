@@ -136,8 +136,23 @@ ColumnLayout {
             }
         }
 
-        Kirigami.Separator {
-            Kirigami.FormData.label: "Schedule"
+        Kirigami.Separator {            Kirigami.FormData.label: "Credits"
+            Kirigami.FormData.isSection: true
+        }
+
+        QtControls2.Label {
+            Kirigami.FormData.label: "Artwork:"
+            text: '<a href="https://www.bitday.me/">bitday.me</a> - Default wallpaper images'
+            textFormat: Text.RichText
+            onLinkActivated: Qt.openUrlExternally(link)
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.NoButton
+                cursorShape: parent.hoveredLink ? Qt.PointingHandCursor : Qt.ArrowCursor
+            }
+        }
+
+        Kirigami.Separator {            Kirigami.FormData.label: "Schedule"
             Kirigami.FormData.isSection: true
         }
 

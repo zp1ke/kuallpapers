@@ -86,6 +86,10 @@ Alternatively, you can use standard KDE tools:
 kpackagetool6 --type Plasma/Wallpaper --upgrade .
 ```
 
+## Credits
+
+Default wallpaper artwork provided by [bitday.me](https://www.bitday.me/) - Beautiful minimalist illustrations for every moment of the day.
+
 ## License
 
 Licensed under the [Apache License 2.0](LICENSE).
