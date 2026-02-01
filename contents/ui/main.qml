@@ -9,6 +9,8 @@ WallpaperItem {
     id: root
 
     property string scheduleJson: wallpaper.configuration.ScheduleJson || "{\"00:00\":\"images/11-Mid-Night.png\",\"04:00\":\"images/12-Late-Night.png\",\"06:00\":\"images/01-Early-Morning.png\",\"08:00\":\"images/02-Mid-Morning.png\",\"10:00\":\"images/03-Late-Morning.png\",\"12:00\":\"images/04-Early-Afternoon.png\",\"14:00\":\"images/05-Mid-Afternoon.png\",\"16:00\":\"images/06-Late-Afternoon.png\",\"18:00\":\"images/07-Early-Evening.png\",\"19:30\":\"images/08-Mid-Evening.png\",\"21:00\":\"images/09-Late-Evening.png\",\"22:30\":\"images/10-Early-Night.png\"}"
+    property string heicFilePath: ""
+    property bool processingHeic: false
 
     property int updateInterval: wallpaper.configuration.UpdateInterval || 5
 
@@ -21,7 +23,34 @@ WallpaperItem {
         }
         function onScheduleJsonChanged() {
             scheduleJson = wallpaper.configuration.ScheduleJson
+            checkForHeicFile()
             updateWallpaper()
+        }
+    }
+
+    PlasmaCore.DataSource {
+        id: executable
+        engine: "executable"
+        connectedSources: []
+        onNewData: {
+            const stdout = data["stdout"]
+            if (stdout && heicFilePath) {
+                try {
+                    const parsed = JSON.parse(stdout)
+                    if (Array.isArray(parsed)) {
+                        scheduleJson = stdout
+                        processingHeic = false
+                        console.log("Kuallpapers: Loaded HEIC schedule with", parsed.length, "entries")
+                    }
+                } catch (e) {
+                    console.error("Kuallpapers: Error parsing HEIC output:", e)
+                    processingHeic = false
+                }
+            }
+            disconnectSource(sourceName)
+        }
+        function exec(cmd) {
+            connectSource(cmd)
         }
     }
 
@@ -79,6 +108,42 @@ WallpaperItem {
             normalized = normalized.replace("file://", "");
         }
         return normalized.split("/").pop();
+    }
+
+    function checkForHeicFile() {
+        if (TimeCalc.isHeicFile(scheduleJson)) {
+            heicFilePath = scheduleJson
+
+            // Try to load cached schedule first
+            const cached = TimeCalc.loadHeicSchedule(heicFilePath)
+            if (cached) {
+                scheduleJson = JSON.stringify(cached)
+                console.log("Kuallpapers: Loaded cached HEIC schedule")
+                return
+            }
+
+            // If no cache, process the HEIC file
+            processHeicFile(heicFilePath)
+        } else {
+            heicFilePath = ""
+        }
+    }
+
+    function processHeicFile(filePath) {
+        if (processingHeic) return
+
+        processingHeic = true
+        const pythonScript = Qt.resolvedUrl("../code/heic_parser.py").toString().replace("file://", "")
+        let normalizedPath = filePath
+
+        if (normalizedPath.startsWith("file://")) {
+            normalizedPath = normalizedPath.substring(7)
+        }
+
+        // Try python3 first, then python
+        const cmd = `python3 "${pythonScript}" "${normalizedPath}" 2>&1 || python "${pythonScript}" "${normalizedPath}" 2>&1`
+        console.log("Kuallpapers: Processing HEIC file:", normalizedPath)
+        executable.exec(cmd)
     }
 
     Image {
@@ -142,6 +207,7 @@ WallpaperItem {
     }
 
     Component.onCompleted: {
+        checkForHeicFile()
         updateWallpaper()
     }
 
