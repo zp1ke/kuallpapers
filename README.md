@@ -5,7 +5,6 @@
 ## Features
 
 - **Custom Schedule**: Define unlimited time slots (HH:MM) and assign specific images to them.
-- **HEIC Support**: Use Apple's Dynamic Desktop HEIC files directly (see [HEIC_SUPPORT.md](HEIC_SUPPORT.md))
 - **Default Day-Cycle**: Comes pre-configured with a 12-stage day/night cycle using high-quality defaults.
 - **Flexible**: Set it to change every hour, every 30 minutes, or at specific moments like "08:00" for work start and "18:00" for evening relaxation.
 - **Scaling Options**: Supports standard Plasma image scaling modes (Crop, Stretch, Fit, Center, Tile).
@@ -37,14 +36,11 @@
 1.  Right-click on your desktop and select **Configure Desktop and Wallpaper**.
 2.  In the **Wallpaper Type** dropdown, select **Kuallpapers**.
 3.  **Schedule Settings**:
-    - **Option A - HEIC File**: Click "Browse HEIC" to use an Apple Dynamic Desktop file (see [HEIC Support](HEIC_SUPPORT.md) for details)
-    - **Option B - Manual Schedule**: The plugin comes with a default schedule that you can customize
+    - The plugin comes with a default schedule.
     - You can **Add**, **Remove**, or **Edit** entries in the list.
     - **Time**: Enter the start time in `HH:MM` format (24-hour).
     - **Image**: Select an image file from your system.
 4.  **Display Settings**: Choose how the image should scale to fit your screen.
-
-> **Note**: For using HEIC Dynamic Desktop files, see the [HEIC Support Guide](HEIC_SUPPORT.md) for requirements and setup instructions.
 
 ## Default Schedule
 

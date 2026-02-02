@@ -156,43 +156,6 @@ ColumnLayout {
             Kirigami.FormData.isSection: true
         }
 
-        RowLayout {
-            Kirigami.FormData.label: "HEIC File:"
-            spacing: 8
-
-            QtControls2.TextField {
-                id: heicFileField
-                Layout.fillWidth: true
-                placeholderText: "Select a HEIC Dynamic Desktop file..."
-                readOnly: true
-            }
-
-            QtControls2.Button {
-                text: "Browse HEIC"
-                icon.name: "document-open"
-                onClicked: heicFileDialog.open()
-            }
-
-            QtControls2.Button {
-                text: "Clear"
-                icon.name: "edit-clear"
-                enabled: heicFileField.text !== ""
-                onClicked: {
-                    heicFileField.text = ""
-                    scheduleModel.clear()
-                    scheduleJsonField.text = defaultScheduleJson()
-                    saveScheduleToConfig()
-                }
-            }
-        }
-
-        QtControls2.Label {
-            Kirigami.FormData.label: "Or Manual:"
-            text: "Configure individual schedule entries below"
-            font.italic: true
-            visible: heicFileField.text === ""
-        }
-
         ColumnLayout {
             Kirigami.FormData.label: "Entries:"
             Layout.fillWidth: true
@@ -348,24 +311,6 @@ ColumnLayout {
                 scheduleModel.setProperty(targetIndex, "image", selectedPath)
                 saveScheduleToConfig()
             }
-        }
-    }
-
-    // File dialog for HEIC file selection
-    FileDialog {
-        id: heicFileDialog
-        title: "Select HEIC Dynamic Desktop File"
-        nameFilters: ["HEIC files (*.heic *.heif)", "All files (*)"]
-        onAccepted: {
-            const selectedPath = selectedFile.toString().replace("file://", "")
-            heicFileField.text = selectedPath
-
-            // When HEIC file is selected, set it as the schedule directly
-            // The main.qml will detect it's a HEIC and process it
-            scheduleJsonField.text = selectedPath
-            saveScheduleToConfig()
-
-            console.log("HEIC file selected:", selectedPath)
         }
     }
 
