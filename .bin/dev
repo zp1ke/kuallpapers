@@ -112,6 +112,31 @@ cmd_package() {
     log_success "Package created: $PROJECT_ROOT/$package_file"
 }
 
+cmd_plasmoid() {
+    local version=$(get_version)
+    local package_file="kuallpapers-${version}.plasmoid"
+
+    log_info "Creating KDE Store-compatible plasmoid package for version $version..."
+
+    # Create clean archive with only necessary files for KDE Store
+    tar -czf "$PROJECT_ROOT/$package_file" \
+        --exclude='.git*' \
+        --exclude='.bin' \
+        --exclude='.envrc' \
+        --exclude='*.tar.xz' \
+        --exclude='*.plasmoid' \
+        --exclude='Screenshot_*.png' \
+        -C "$PROJECT_ROOT" \
+        metadata.json \
+        contents \
+        LICENSE \
+        README.md \
+        $([ -d "$PROJECT_ROOT/images" ] && echo "images" || echo "")
+
+    log_success "KDE Store package created: $PROJECT_ROOT/$package_file"
+    log_info "Upload this file to https://store.kde.org"
+}
+
 cmd_release() {
     local draft="false"
     local prerelease="false"
@@ -170,9 +195,11 @@ cmd_release() {
         fi
     fi
 
-    # Create package
+    # Create packages
     cmd_package
+    cmd_plasmoid
     local package_file="kuallpapers-${version}.tar.xz"
+    local plasmoid_file="kuallpapers-${version}.plasmoid"
 
     # Create GitHub release
     local title="Kuallpapers v$version"
@@ -188,13 +215,24 @@ cmd_release() {
 - Support for dawn, morning, day, evening, dusk, and night phases
 
 ### Installation
-1. Download the \`$package_file\` file below
-2. Open KDE System Settings > Appearance > Wallpaper
-3. Click \"Get New Wallpapers\" and install the downloaded file
-4. Select \"Kuallpapers\" from the wallpaper type dropdown"
+
+#### From KDE Store (Recommended)
+1. Open KDE System Settings → Appearance → Wallpaper
+2. Click \"Get New Wallpapers\"
+3. Search for \"Kuallpapers\" and install
+
+#### Manual Installation
+1. Download \`$plasmoid_file\` below
+2. Run: \`kpackagetool6 --type Plasma/Wallpaper --install $plasmoid_file\`
+3. Right-click desktop → Configure Desktop and Wallpaper → Select \"Kuallpapers\"
+
+#### For Developers
+Download \`$package_file\` for the full source package with development tools."
 
     # Execute release
-    gh release create "$tag" "$PROJECT_ROOT/$package_file" \
+    gh release create "$tag" \
+        "$PROJECT_ROOT/$package_file" \
+        "$PROJECT_ROOT/$plasmoid_file" \
         --title "$title" \
         --notes "$release_notes" \
         --draft="$draft" \
@@ -212,6 +250,7 @@ cmd_release() {
 cmd_clean() {
     log_info "Cleaning artifacts..."
     rm -f "$PROJECT_ROOT"/*.tar.xz
+    rm -f "$PROJECT_ROOT"/*.plasmoid
     log_success "Cleaned."
 }
 
@@ -220,15 +259,16 @@ show_usage() {
     echo "Usage: $(basename "$0") [command]"
     echo ""
     echo "Commands:"
-    echo "  install    Install plugin to user directory"
-    echo "  uninstall  Remove plugin from user directory"
-    echo "  test       Install and open system settings"
-    echo "  package    Build .tar.xz package for release"
-    echo "  release    Create GitHub release (requires gh cli)"
-    echo "             Options: --draft (create draft release)"
-    echo "                      --prerelease (mark as pre-release)"
-    echo "  clean      Remove temporary files"
-    echo "  help       Show this help"
+    echo "  install     Install plugin to user directory"
+    echo "  uninstall   Remove plugin from user directory"
+    echo "  test        Install and open system settings"
+    echo "  package     Build .tar.xz package for release"
+    echo "  plasmoid    Create KDE Store-compatible .plasmoid package"
+    echo "  release     Create GitHub release (requires gh cli)"
+    echo "              Options: --draft (create draft release)"
+    echo "                       --prerelease (mark as pre-release)"
+    echo "  clean       Remove temporary files"
+    echo "  help        Show this help"
     echo "  completions Generate shell completions (bash|fish|zsh)"
 }
 
@@ -293,6 +333,7 @@ case "${1:-help}" in
     install)   cmd_install ;;
     uninstall) cmd_uninstall ;;
     test)      cmd_test ;;
+    plasmoid)  cmd_plasmoid ;;
     package)   cmd_package ;;
     release)   shift; cmd_release "$@" ;;
     clean)     cmd_clean ;;

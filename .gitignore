@@ -32,6 +32,7 @@ Thumbs.db
 *.tar.gz
 *.tar.xz
 *.zip
+*.plasmoid
 
 # Temporary files
 tmp/
