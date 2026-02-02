@@ -8,7 +8,7 @@ import "../code/timeCalculations.js" as TimeCalc
 WallpaperItem {
     id: root
 
-    property string scheduleJson: wallpaper.configuration.ScheduleJson || "{\"00:00\":\"images/11-Mid-Night.png\",\"04:00\":\"images/12-Late-Night.png\",\"06:00\":\"images/01-Early-Morning.png\",\"08:00\":\"images/02-Mid-Morning.png\",\"10:00\":\"images/03-Late-Morning.png\",\"12:00\":\"images/04-Early-Afternoon.png\",\"14:00\":\"images/05-Mid-Afternoon.png\",\"16:00\":\"images/06-Late-Afternoon.png\",\"18:00\":\"images/07-Early-Evening.png\",\"19:30\":\"images/08-Mid-Evening.png\",\"21:00\":\"images/09-Late-Evening.png\",\"22:30\":\"images/10-Early-Night.png\"}"
+    property string scheduleJson: wallpaper.configuration.ScheduleJson || TimeCalc.getDefaultScheduleJson()
 
     property int updateInterval: wallpaper.configuration.UpdateInterval || 5
 

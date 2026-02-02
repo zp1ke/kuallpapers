@@ -1,6 +1,23 @@
 // timeCalculations.js
 // .pragma library
 
+function getDefaultScheduleJson() {
+  return JSON.stringify([
+    { "time": "01:00", "image": "images/12-Late-Night.png" },
+    { "time": "06:30", "image": "images/01-Early-Morning.png" },
+    { "time": "07:20", "image": "images/02-Mid-Morning.png" },
+    { "time": "09:00", "image": "images/03-Late-Morning.png" },
+    { "time": "12:00", "image": "images/04-Early-Afternoon.png" },
+    { "time": "14:00", "image": "images/05-Mid-Afternoon.png" },
+    { "time": "16:00", "image": "images/06-Late-Afternoon.png" },
+    { "time": "17:00", "image": "images/07-Early-Evening.png" },
+    { "time": "18:00", "image": "images/08-Mid-Evening.png" },
+    { "time": "18:30", "image": "images/09-Late-Evening.png" },
+    { "time": "19:30", "image": "images/10-Early-Night.png" },
+    { "time": "22:00", "image": "images/11-Mid-Night.png" }
+  ]);
+}
+
 function timeToMinutes(timeDecimal) {
   const hours = Math.floor(timeDecimal);
   const minutes = (timeDecimal - hours) * 60;
