@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- `mise.toml` with development task definitions (`install`, `uninstall`, `test`, `package`, `plasmoid`, `release`, `clean`, `help`, `completions`)
+
+### Changed
+- `.bin/dev` now acts as a mise-backed compatibility wrapper (`mise run <task>`)
+- Existing command implementation moved to `.bin/dev-core`
+
+### Removed
+- direnv-based `.envrc` development bootstrap
+
 ## [0.0.2] - 2026-02-02
 
 ### Added

@@ -1,0 +1,38 @@
+[env]
+_.path = ["./.bin"]
+
+[tasks.help]
+description = "Show available development commands"
+run = ".bin/dev-core help"
+
+[tasks.install]
+description = "Install plugin to user directory"
+run = ".bin/dev-core install"
+
+[tasks.uninstall]
+description = "Remove plugin from user directory"
+run = ".bin/dev-core uninstall"
+
+[tasks.test]
+description = "Install and open system settings"
+run = ".bin/dev-core test"
+
+[tasks.package]
+description = "Build .tar.xz package for release"
+run = ".bin/dev-core package"
+
+[tasks.plasmoid]
+description = "Create KDE Store-compatible .plasmoid package"
+run = ".bin/dev-core plasmoid"
+
+[tasks.release]
+description = "Create GitHub release (supports -- --draft/--prerelease)"
+run = ".bin/dev-core release"
+
+[tasks.clean]
+description = "Remove temporary files"
+run = ".bin/dev-core clean"
+
+[tasks.completions]
+description = "Generate shell completions (bash|fish|zsh)"
+run = ".bin/dev-core completions"

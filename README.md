@@ -63,20 +63,39 @@ The default configuration provides a smooth transition through the day:
 
 ## Development
 
-If you want to contribute or modify the plugin, you can use the included helper script in `.bin/dev`:
+This project now uses [mise](https://mise.jdx.dev/) for development task orchestration.
+
+1. Install and activate mise for your shell.
+2. From the project root, run:
+
+```bash
+mise install
+```
+
+3. Use either `mise run <task>` directly, or the compatibility helper script `.bin/dev`.
+
+Examples:
 
 ```bash
 # Show available commands
+mise tasks ls
 .bin/dev help
 
 # Install locally for current user
+mise run install
 .bin/dev install
 
 # Install and open settings for testing
+mise run test
 .bin/dev test
 
 # Create a release package
+mise run package
 .bin/dev package
+
+# Release with flags
+mise run release -- --draft
+.bin/dev release -- --draft
 ```
 
 Alternatively, you can use standard KDE tools:
